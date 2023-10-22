@@ -1,11 +1,13 @@
 use std::io;
 use std::fs;
 use std::path::{Path};
+use sha2::{Digest, Sha256};
 
 fn main() {
     println!("SAV, antivirus");
-    let path = Path::new("directory_path");
-    visit_dirs(path);
+    // let path = Path::new("/home/marcelo/Desktop/side-projects/sav/src");
+    // visit_dirs(path);
+    create_signature_hash();
 }
 
 
@@ -29,3 +31,15 @@ fn visit_dirs(dir: &Path) -> io::Result<()> {
 }
 
 
+
+
+
+fn create_signature_hash() {
+    let mut hasher = Sha256::new();
+
+    hasher.update("Hello world!");
+
+    let result = hasher.finalize();
+
+    println!("hash key: {:x}", result);
+}
