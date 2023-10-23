@@ -5,9 +5,9 @@ use sha2::{Digest, Sha256};
 
 fn main() {
     println!("SAV, antivirus");
-    // let path = Path::new("/home/marcelo/Desktop/side-projects/sav/src");
-    // visit_dirs(path);
-    create_signature_hash();
+    let path = Path::new("/home/marcelo/Desktop/side-projects/sav/src");
+    visit_dirs(path);
+
 }
 
 
@@ -32,14 +32,25 @@ fn visit_dirs(dir: &Path) -> io::Result<()> {
 
 
 
+// signature-based detection
+
+fn signature_detection(file_path: &Path) -> io::Result<()> {
+    // let virus_hash = "c0535e4be2b79ffd93291305436bf889314e4a3faec05ecffcbb7df31ad9e51a";
+    let content = fs::read_to_string(file_path).unwrap();
+
+    let file_hash = create_signature_hash(&content);
+    println!("{}", file_hash);
+
+    Ok(())
+}
 
 
-fn create_signature_hash() {
+fn create_signature_hash(content: &str) -> String {
     let mut hasher = Sha256::new();
-
-    hasher.update("Hello world!");
-
+    hasher.update(content);
     let result = hasher.finalize();
-
-    println!("hash key: {:x}", result);
+    let formated_hash = format!("{:x}", result);
+    
+    formated_hash
+    
 }
