@@ -10,9 +10,6 @@ fn main() {
 
 }
 
-
-
-
 fn visit_dirs(dir: &Path) -> io::Result<()> {
     if dir.is_dir() {
         for entry in fs::read_dir(dir)? {
@@ -35,11 +32,16 @@ fn visit_dirs(dir: &Path) -> io::Result<()> {
 // signature-based detection
 
 fn signature_detection(file_path: &Path) -> io::Result<()> {
-    // let virus_hash = "c0535e4be2b79ffd93291305436bf889314e4a3faec05ecffcbb7df31ad9e51a";
+    let virus_hash = "82b1b06a8e5863f3ac23a93e5810cb1850e9d0783d0f0fb905bd797dd1e4fc6b";
     let content = fs::read_to_string(file_path).unwrap();
 
     let file_hash = create_signature_hash(&content);
-    println!("{}", file_hash);
+
+    if file_hash == virus_hash {
+        println!("this file: {} is a virus", file_hash);
+    } else {
+        println!("{}", file_hash);
+    }
 
     Ok(())
 }
