@@ -40,10 +40,12 @@ fn signature_detection(file_path: &Path) -> io::Result<()> {
     file.read_to_end(&mut buffer)?;
 
     let file_hash = create_signature_hash(&buffer);
-    
+  
 
     if file_hash == virus_hash_example {
-        println!("this file: {} is a virus", file_hash);
+        println!("{} <- virus, removing this file", file_hash);
+        fs::remove_file(file_path);
+        
     } else {
         println!("{}", file_hash);
     }
