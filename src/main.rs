@@ -32,22 +32,33 @@ fn visit_dirs(dir: &Path) -> io::Result<()> {
 // signature-based detection
 
 fn signature_detection(file_path: &Path) -> io::Result<()> {
-    let virus_hash_example = "82b1b06a8e5863f3ac23a93e5810cb1850e9d0783d0f0fb905bd797dd1e4fc6b";
+    let virus_hash_example = "2898a07b2cf23dda8530b14b6aa522e67b002886d170c02219acc3598fdb50f3";
 
-    let mut file = File::open(file_path)?;
-    let mut buffer = Vec::new();
+    match File::open(file_path) {
+        Ok(mut file) => {
+            let mut buffer = Vec::new();
 
-    file.read_to_end(&mut buffer)?;
+            if let Err(err) = file.read_to_end(&mut buffer) {
+                eprintln!("Error reading the file: {}", err);
+                return Err(err);
+            }
 
-    let file_hash = create_signature_hash(&buffer);
-  
+            let file_hash = create_signature_hash(&buffer);
 
-    if file_hash == virus_hash_example {
-        println!("{} <- virus, removing this file", file_hash);
-        fs::remove_file(file_path);
-        
-    } else {
-        println!("{}", file_hash);
+            if file_hash == virus_hash_example {
+                println!("{} <- virus, removing this file", file_hash);
+                if let Err(err) = fs::remove_file(file_path) {
+                    eprintln!("error when removing file: {}", err);
+                    return Err(err);
+                }
+            } else {
+                println!("{}", file_hash);
+            }
+        }
+        Err(err) => {
+            eprintln!("error opening file: {}", err);
+            return Err(err);
+        }
     }
 
     Ok(())
