@@ -74,3 +74,12 @@ fn create_signature_hash(content: &Vec<u8>) -> String {
     formated_hash
     
 }
+
+
+
+// heuristic based detection
+
+
+fn heuristic_based_detection(file_path: &Path) {
+
+}
