@@ -5,7 +5,7 @@ use sha2::{Digest, Sha256};
 
 fn main() {
     println!("SAV, antivirus");
-    let path = Path::new("/home/marcelo/Desktop/side-projects/sav/src");
+    let path = Path::new("/home/marcelo/Desktop/side-projects/sav/src/teste");
     visit_dirs(path);
 
 }
@@ -18,7 +18,7 @@ fn visit_dirs(dir: &Path) -> io::Result<()> {
             if path.is_dir() {
                 let _ = visit_dirs(&path)?;
             } else {
-                let _ = signature_detection(&path)?;
+                let _ = heuristic_based_detection(&path);
             }
         }
     } else {
@@ -80,6 +80,21 @@ fn create_signature_hash(content: &Vec<u8>) -> String {
 // heuristic based detection
 
 
-fn heuristic_based_detection(file_path: &Path) {
+fn heuristic_based_detection(file_path: &Path) -> bool {
+    let virus_content = "virus";
+
+
+    if let Ok(file_content) = fs::read(file_path) {
+        if let Ok(file_content_utf8) = String::from_utf8(file_content) {
+            if file_content_utf8.contains(virus_content) {
+                println!("Is a virus");
+                return true;
+            }
+        }
+    }
+
+   
+          
+    return false
 
 }
