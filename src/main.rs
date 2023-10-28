@@ -5,7 +5,7 @@ use sha2::{Digest, Sha256};
 
 fn main() {
     println!("SAV, antivirus");
-    let path = Path::new("/home/marcelo/Desktop/side-projects/sav/src/teste");
+    let path = Path::new("/home/marcelo/Desktop/side-projects/sav/src/");
     visit_dirs(path);
 
 }
@@ -18,7 +18,7 @@ fn visit_dirs(dir: &Path) -> io::Result<()> {
             if path.is_dir() {
                 let _ = visit_dirs(&path)?;
             } else {
-                let _ = heuristic_based_detection(&path);
+                let _ = signature_detection(&path)?;
             }
         }
     } else {
@@ -32,7 +32,7 @@ fn visit_dirs(dir: &Path) -> io::Result<()> {
 // signature-based detection
 
 fn signature_detection(file_path: &Path) -> io::Result<()> {
-    let virus_hash_example = "2898a07b2cf23dda8530b14b6aa522e67b002886d170c02219acc3598fdb50f3";
+    let virus_hash_example = "3339730bc15121cf0cf2a29d74b3000bc3a5cd6caad26f305723043c4f70596b";
 
     match File::open(file_path) {
         Ok(mut file) => {
@@ -52,7 +52,7 @@ fn signature_detection(file_path: &Path) -> io::Result<()> {
                     return Err(err);
                 }
             } else {
-                println!("{}", file_hash);
+                println!("{} {:?}", file_hash, file_path);
             }
         }
         Err(err) => {
