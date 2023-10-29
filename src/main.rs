@@ -18,7 +18,7 @@ fn visit_dirs(dir: &Path) -> io::Result<()> {
             if path.is_dir() {
                 let _ = visit_dirs(&path)?;
             } else {
-                let _ = signature_detection(&path)?;
+                let _ = heuristic_based_detection(&path);
             }
         }
     } else {
@@ -81,20 +81,32 @@ fn create_signature_hash(content: &Vec<u8>) -> String {
 
 
 fn heuristic_based_detection(file_path: &Path) -> bool {
-    let virus_content = "virus";
+
+    let mut virus_file = File::open("/home/marcelo/Desktop/side-projects/sav/src/binary_code.txt").expect("Error to reading file");
+    let mut virus_buffer = Vec::new();
 
 
-    if let Ok(file_content) = fs::read(file_path) {
-        if let Ok(file_content_utf8) = String::from_utf8(file_content) {
-            if file_content_utf8.contains(virus_content) {
-                println!("Is a virus");
-                return true;
-            }
-        }
+    if let Err(err) = virus_file.read_to_end(&mut virus_buffer) {
+        eprintln!("Error reading the file: {}", err);
+        return false;
+    }
+
+    
+
+    let mut file = File::open(file_path).expect("Error to reading file");;
+    let mut buffer = Vec::new();
+
+
+    if let Ok(file_content) = file.read_to_end(&mut buffer) {
+        if virus_buffer == buffer {
+            println!("is a virus");
+            return true
+        } 
     }
 
    
           
-    return false
+
+    true
 
 }
