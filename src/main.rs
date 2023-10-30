@@ -107,6 +107,7 @@ fn heuristic_based_detection(file_path: &Path) -> bool {
             let matching = virus_buffer.iter().zip(&buffer).filter(|&(virus_buffer, buffer)| virus_buffer == buffer).count();
             println!("{}", matching);
 
+            
         }   
 
     } 
