@@ -84,7 +84,7 @@ fn create_signature_hash(content: &Vec<u8>) -> String {
 
 
 fn heuristic_based_detection(file_path: &Path) -> bool {
-    println!("{:?}", file_path);
+    println!("this file path is: {:?}", file_path);
     let mut virus_file = File::open("/home/marcelo/Desktop/side-projects/sav/src/comparing/b.txt").expect("Error to reading file");
     let mut virus_buffer = Vec::new();
 
@@ -105,9 +105,11 @@ fn heuristic_based_detection(file_path: &Path) -> bool {
             return true
         } else {
             let matching = virus_buffer.iter().zip(&buffer).filter(|&(virus_buffer, buffer)| virus_buffer == buffer).count();
-            println!("{}", matching);
+            let total_elements = virus_buffer.len().min(buffer.len());
+            let percentage = (matching as f32 / total_elements as f32) * 100.0;
+            println!("{}", percentage);
 
-            
+
         }   
 
     } 
