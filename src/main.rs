@@ -99,8 +99,11 @@ fn heuristic_based_detection(file_path: &Path) -> bool {
     let mut buffer = Vec::new();
 
 
+    
+    
 
     if let Ok(file_content) = file.read_to_end(&mut buffer) {
+
         if virus_buffer == buffer {
             println!("is a virus");
             return true
@@ -119,7 +122,16 @@ fn heuristic_based_detection(file_path: &Path) -> bool {
 
 }
 
-fn shift_left() -> Vec<u8> {
+fn shift_left(buffer: &Vec<u8>) -> Vec<u8> {
+    let mut result = vec![0u8; buffer.len()];
 
+
+    for i in 0..buffer.len() {
+        if i > 0 {
+            result[i - 1] = buffer[i - 1] << 1;
+        }
+    }
+
+    result
 }
 
