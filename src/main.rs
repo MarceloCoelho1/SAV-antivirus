@@ -103,7 +103,11 @@ fn heuristic_based_detection(file_path: &Path) -> bool {
     
 
     if let Ok(file_content) = file.read_to_end(&mut buffer) {
+        let total_elements_min_file = virus_buffer.len().min(buffer.len());
 
+        for _ in 0..total_elements_min_file {
+            
+        }
         if virus_buffer == buffer {
             println!("is a virus");
             return true
@@ -135,3 +139,15 @@ fn shift_left(buffer: &Vec<u8>) -> Vec<u8> {
     result
 }
 
+fn shift_right(buffer: &Vec<u8>) -> Vec<u8> {
+    let mut result = vec![0u8; buffer.len()];
+
+
+    for i in 0..buffer.len() {
+        if i > 0 {
+            result[i - 1] = buffer[i - 1] >> 1;
+        }
+    }
+
+    result
+}
