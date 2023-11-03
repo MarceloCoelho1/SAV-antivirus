@@ -105,25 +105,22 @@ fn heuristic_based_detection(file_path: &Path) -> bool {
     if let Ok(file_content) = file.read_to_end(&mut buffer) {
         let total_elements_min_file = virus_buffer.len().min(buffer.len());
 
-        for _ in 0..total_elements_min_file {
-            
-        }
-        if virus_buffer == buffer {
-            println!("is a virus");
-            return true
-        } else {
-            let matching = virus_buffer.iter().zip(&buffer).filter(|&(virus_buffer, buffer)| virus_buffer == buffer).count();
-            let total_elements = virus_buffer.len().min(buffer.len());
-            let percentage = (matching as f32 / total_elements as f32) * 100.0;
-            println!("{}", percentage);
+        println!("{}", total_elements_min_file);
 
-
-        }   
-
+        let matching = virus_buffer.iter().zip(&buffer).filter(|&(virus_buffer, buffer)| virus_buffer == buffer).count();
+        let total_elements = virus_buffer.len().min(buffer.len());
+        let percentage = (matching as f32 / total_elements as f32) * 100.0;
+        println!("{}", percentage);
     } 
 
     false
 
+}
+
+fn read_bit(file: &mut File) -> Result<u8> {
+    let mut buffer = [0; 1];
+    file.read_exact(&mut buffer)?;
+    Ok((buffer[0] & 0x01) as u8)
 }
 
 fn shift_left(buffer: &Vec<u8>) -> Vec<u8> {
