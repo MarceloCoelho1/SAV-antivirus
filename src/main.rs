@@ -82,14 +82,14 @@ fn create_signature_hash(content: &Vec<u8>) -> String {
 
 // heuristic based detection
 
-
+// impl read a file in bits not bytes
 fn heuristic_based_detection(file_path: &Path) -> bool {
     println!("this file path is: {:?}", file_path);
     let mut virus_file = File::open("/home/marcelo/Desktop/side-projects/sav/src/comparing/b.txt").expect("Error to reading file");
     let mut virus_buffer = Vec::new();
 
 
-    if let Err(err) = virus_file.read_to_end(&mut virus_buffer) {
+    if let Err(err) = virus_file.read_to_end(&mut virus_buffer)  {
         eprintln!("Error reading the file: {}", err);
         return false;
     }
@@ -98,30 +98,19 @@ fn heuristic_based_detection(file_path: &Path) -> bool {
     let mut file = File::open(file_path).expect("Error to reading file");
     let mut buffer = Vec::new();
 
-
-    
-    
-
     if let Ok(file_content) = file.read_to_end(&mut buffer) {
         let total_elements_min_file = virus_buffer.len().min(buffer.len());
-
-        println!("{}", total_elements_min_file);
 
         let matching = virus_buffer.iter().zip(&buffer).filter(|&(virus_buffer, buffer)| virus_buffer == buffer).count();
         let total_elements = virus_buffer.len().min(buffer.len());
         let percentage = (matching as f32 / total_elements as f32) * 100.0;
-        println!("{}", percentage);
+        println!("{}%", percentage);
     } 
 
     false
 
 }
 
-fn read_bit(file: &mut File) -> Result<u8> {
-    let mut buffer = [0; 1];
-    file.read_exact(&mut buffer)?;
-    Ok((buffer[0] & 0x01) as u8)
-}
 
 fn shift_left(buffer: &Vec<u8>) -> Vec<u8> {
     let mut result = vec![0u8; buffer.len()];
