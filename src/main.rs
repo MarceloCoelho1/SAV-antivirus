@@ -100,18 +100,27 @@ fn heuristic_based_detection(file_path: &Path) -> bool {
 
     if let Ok(file_content) = file.read_to_end(&mut buffer) {
 
+        let virus_len = virus_buffer.len();
+        let file_len = buffer.len();
+
         let total_elements_max_file = virus_buffer.len().max(buffer.len());
-        let total_elements_min_file = virus_buffer.len().min(buffer.len());
+        let mut diff;
+        if file_len < virus_len {
+            diff = virus_len - file_len;
+        } else {
+            diff = file_len - virus_len;
+        }
 
-        let diff = total_elements_max_file - total_elements_min_file;
 
-
-        // if virus has a shift right
+        // if virus has a Wildcard character
         if buffer.len() < virus_buffer.len() {
             for i in 0..diff {
                 buffer.insert(0, buffer[0]);
             }
-        }
+        } 
+
+
+
         
         let matching = virus_buffer.iter().zip(&buffer).filter(|&(virus_buffer, buffer)| virus_buffer == buffer).count();
         let percentage = (matching as f32 / total_elements_max_file as f32) * 100.0;
