@@ -2,12 +2,13 @@ use std::io::{Read, self};
 use std::fs::{File, self};
 use std::path::{Path};
 use sha2::{Digest, Sha256};
+use stringmetrics::levenshtein;
 
 fn main() {
     println!("SAV, antivirus");
     let path = Path::new("/home/marcelo/Desktop/side-projects/sav/src/comparing/");
     visit_dirs(path);
-    
+
 
     
 }
@@ -86,43 +87,31 @@ fn heuristic_based_detection(file_path: &Path) -> bool {
     println!("this file path is: {:?}", file_path);
     let mut virus_file = File::open("/home/marcelo/Desktop/side-projects/sav/src/comparing/virus.txt").expect("Error to reading file");
     let mut virus_buffer = Vec::new();
-
-
-    if let Err(err) = virus_file.read_to_end(&mut virus_buffer)  {
+ 
+    if let Err(err) = virus_file.read_to_end(&mut virus_buffer) {
         eprintln!("Error reading the file: {}", err);
         return false;
     }
-
-
+ 
+    let virus_string = String::from_utf8(virus_buffer).expect("Failed to convert bytes to string");
+ 
     let mut file = File::open(file_path).expect("Error to reading file");
     let mut buffer = Vec::new();
-
-    if let Ok(file_content) = file.read_to_end(&mut buffer) {
-
-        let virus_len = virus_buffer.len();
-        let file_len = buffer.len();
-
-        let total_elements_max_file = virus_buffer.len().max(buffer.len());
-        let mut diff;
-        
-        if file_len < virus_len {
-            diff = virus_len - file_len;
-        } else {
-            diff = file_len - virus_len;
-        }
-
-
-        
-        let matching = virus_buffer.iter().zip(&buffer).filter(|&(virus_buffer, buffer)| virus_buffer == buffer).count();
-        let percentage = (matching as f32 / total_elements_max_file as f32) * 100.0;
-        println!("{}%", percentage);
-
-        
-
-        if percentage > 80.0 {
+ 
+    if let Ok(_) = file.read_to_end(&mut buffer) {
+        let file_string = String::from_utf8(buffer).expect("Failed to convert bytes to string");
+ 
+        let distance = levenshtein(&file_string, &virus_string);
+        let max_length = file_string.len().max(virus_string.len());
+    
+        let similarity = (1.0 - (distance as f64 / max_length as f64)) * 100.00;
+    
+        println!("{similarity}");
+ 
+        if similarity > 80.0 {
             println!("is a virus");
             return true;
-        } else if percentage > 60.0 {
+        } else if similarity > 60.0 {
             println!("file in quarentene");
             return true;
         } else {
@@ -130,40 +119,7 @@ fn heuristic_based_detection(file_path: &Path) -> bool {
             return false;
         }
     } 
-
+ 
     false
+ }
 
-}
-
-// impl diff algorithm
-fn diff() {
-
-}
-
-
-
-fn shift_left(buffer: &Vec<u8>) -> Vec<u8> {
-    let mut result = vec![0u8; buffer.len()];
-
-
-    for i in 0..buffer.len() {
-        if i > 0 {
-            result[i - 1] = buffer[i - 1] << 1;
-        }
-    }
-
-    result
-}
-
-fn shift_right(buffer: &Vec<u8>) -> Vec<u8> {
-    let mut result = vec![0u8; buffer.len()];
-
-
-    for i in 0..buffer.len() {
-        if i > 0 {
-            result[i - 1] = buffer[i - 1] >> 1;
-        }
-    }
-
-    result
-}

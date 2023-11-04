@@ -67,6 +67,7 @@ name = "sav"
 version = "0.1.0"
 dependencies = [
  "sha2",
+ "stringmetrics",
 ]
 
 [[package]]
@@ -79,6 +80,12 @@ dependencies = [
  "cpufeatures",
  "digest",
 ]
+
+[[package]]
+name = "stringmetrics"
+version = "2.2.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "7b3c8667cd96245cbb600b8dec5680a7319edd719c5aa2b5d23c6bff94f39765"
 
 [[package]]
 name = "typenum"
