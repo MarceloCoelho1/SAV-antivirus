@@ -82,7 +82,6 @@ fn create_signature_hash(content: &Vec<u8>) -> String {
 
 // heuristic based detection
 
-// impl read a file in bits not bytes
 fn heuristic_based_detection(file_path: &Path) -> bool {
     println!("this file path is: {:?}", file_path);
     let mut virus_file = File::open("/home/marcelo/Desktop/side-projects/sav/src/comparing/virus.txt").expect("Error to reading file");
@@ -105,20 +104,12 @@ fn heuristic_based_detection(file_path: &Path) -> bool {
 
         let total_elements_max_file = virus_buffer.len().max(buffer.len());
         let mut diff;
+        
         if file_len < virus_len {
             diff = virus_len - file_len;
         } else {
             diff = file_len - virus_len;
         }
-
-
-        // if virus has a Wildcard character
-        if buffer.len() < virus_buffer.len() {
-            for i in 0..diff {
-                buffer.insert(0, buffer[0]);
-            }
-        } 
-
 
 
         
@@ -143,6 +134,12 @@ fn heuristic_based_detection(file_path: &Path) -> bool {
     false
 
 }
+
+// impl diff algorithm
+fn diff() {
+
+}
+
 
 
 fn shift_left(buffer: &Vec<u8>) -> Vec<u8> {
