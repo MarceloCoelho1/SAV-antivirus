@@ -85,7 +85,7 @@ fn create_signature_hash(content: &Vec<u8>) -> String {
 // impl read a file in bits not bytes
 fn heuristic_based_detection(file_path: &Path) -> bool {
     println!("this file path is: {:?}", file_path);
-    let mut virus_file = File::open("/home/marcelo/Desktop/side-projects/sav/src/comparing/b.txt").expect("Error to reading file");
+    let mut virus_file = File::open("/home/marcelo/Desktop/side-projects/sav/src/comparing/virus.txt").expect("Error to reading file");
     let mut virus_buffer = Vec::new();
 
 
@@ -99,12 +99,30 @@ fn heuristic_based_detection(file_path: &Path) -> bool {
     let mut buffer = Vec::new();
 
     if let Ok(file_content) = file.read_to_end(&mut buffer) {
+
+        let total_elements_max_file = virus_buffer.len().max(buffer.len());
         let total_elements_min_file = virus_buffer.len().min(buffer.len());
 
+        let diff = total_elements_max_file - total_elements_min_file;
+
+
+
+        if buffer.len() < virus_buffer.len() {
+            for i in 0..diff {
+                buffer.insert(0, buffer[0]);
+            }
+        }
+        
         let matching = virus_buffer.iter().zip(&buffer).filter(|&(virus_buffer, buffer)| virus_buffer == buffer).count();
-        let total_elements = virus_buffer.len().min(buffer.len());
-        let percentage = (matching as f32 / total_elements as f32) * 100.0;
+        let percentage = (matching as f32 / total_elements_max_file as f32) * 100.0;
         println!("{}%", percentage);
+
+        
+
+        if percentage > 80.0 {
+            println!("is a virus");
+            return true;
+        }
     } 
 
     false
