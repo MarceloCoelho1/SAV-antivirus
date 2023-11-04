@@ -106,7 +106,7 @@ fn heuristic_based_detection(file_path: &Path) -> bool {
         let diff = total_elements_max_file - total_elements_min_file;
 
 
-
+        // if virus has a shift right
         if buffer.len() < virus_buffer.len() {
             for i in 0..diff {
                 buffer.insert(0, buffer[0]);
@@ -122,6 +122,12 @@ fn heuristic_based_detection(file_path: &Path) -> bool {
         if percentage > 80.0 {
             println!("is a virus");
             return true;
+        } else if percentage > 60.0 {
+            println!("file in quarentene");
+            return true;
+        } else {
+            println!("not a virus");
+            return false;
         }
     } 
 
