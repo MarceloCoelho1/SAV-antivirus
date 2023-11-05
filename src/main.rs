@@ -152,9 +152,8 @@ fn levenshtein_distance(str1: &str, str2: &str, m: usize, n: usize) -> usize {
 
 fn jaccard_similarity(vec1: &Vec<u8>, vec2: &Vec<u8>) {
 
-    let number_of_observations = 0;
     let mut observations_vec = Vec::new();
-    let mut observations_either = Vec::from(vec1);
+    let mut observations_either = vec1.clone();
 
     for i in vec1 {
         for j in vec2 {
@@ -165,20 +164,25 @@ fn jaccard_similarity(vec1: &Vec<u8>, vec2: &Vec<u8>) {
         }
     }
 
-    // let vec2: Vec<u8> = vec![1, 2, 3, 4, 5, 7, 0];
-    // let vec1: Vec<u8> = vec![0, 1, 2, 5, 6, 8, 9];
-    let exist = false;
+    let mut exist = false;
 
-    for i in observations_either.len() {
-        for j in vec2.len() {
-            
+    for i in vec2 {
+        exist = false;
+        for j in vec1 {
+            if i == j {
+                exist = true;
+            }
+        }
+
+        if !exist {
+            observations_either.push(*i)
         }
 
     }
 
-    println!("{:#?}", observations_vec);
+    let a = (observations_vec.len() as f64 / observations_either.len() as f64);
 
-
+    println!("{}", a);  
 
 
 }
