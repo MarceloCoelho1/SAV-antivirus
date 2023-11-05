@@ -150,19 +150,35 @@ fn levenshtein_distance(str1: &str, str2: &str, m: usize, n: usize) -> usize {
     );
 }
 
-fn jaccard_similarity(vec1: &Vec, vec1: &Vec1) {
+fn jaccard_similarity(vec1: &Vec<u8>, vec2: &Vec<u8>) {
 
     let number_of_observations = 0;
+    let mut observations_vec = Vec::new();
+    let mut observations_either = Vec::from(vec1);
 
-    // we first find the total number of observations in both sets, 
-    let observations_in_both: Vec<u8> = vec![0, 2, 5, 9]; 
+    for i in vec1 {
+        for j in vec2 {
+            if i == j {
+                observations_vec.push(i);
+            } 
+
+        }
+    }
+
+    // let vec2: Vec<u8> = vec![1, 2, 3, 4, 5, 7, 0];
+    // let vec1: Vec<u8> = vec![0, 1, 2, 5, 6, 8, 9];
+    let exist = false;
+
+    for i in observations_either.len() {
+        for j in vec2.len() {
+            
+        }
+
+    }
+
+    println!("{:#?}", observations_vec);
 
 
-    // then divide by the total number of observations in either set;
-    let observations_in_either: Vec<u8> = vec![0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
-
-    let similarity = 4.0/10.0;
-    println!("{similarity}");
 
 
 }
