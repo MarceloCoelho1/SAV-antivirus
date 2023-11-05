@@ -7,8 +7,8 @@ use std::cmp;
 fn main() {
     println!("SAV, antivirus");
     let path = Path::new("/home/marcelo/Desktop/side-projects/sav/src/comparing/");
-    let vec1: Vec<u8> = vec![0, 1, 2, 5, 6, 8, 9];
-    let vec2: Vec<u8> = vec![0, 2, 3, 4, 5, 7, 9];
+    let vec1: Vec<&str> = vec!["cat", "dog", "hippo", "monkey"];
+    let vec2: Vec<&str> = vec!["monkey", "rhino", "ostrich", "salmon"];
     jaccard_similarity(&vec1, &vec2);
 }
 
@@ -150,7 +150,7 @@ fn levenshtein_distance(str1: &str, str2: &str, m: usize, n: usize) -> usize {
     );
 }
 
-fn jaccard_similarity(vec1: &Vec<u8>, vec2: &Vec<u8>) {
+fn jaccard_similarity(vec1: &Vec<&str>, vec2: &Vec<&str>) {
 
     let mut observations_vec = Vec::new();
     let mut observations_either = vec1.clone();
@@ -180,7 +180,7 @@ fn jaccard_similarity(vec1: &Vec<u8>, vec2: &Vec<u8>) {
 
     }
 
-    let a = (observations_vec.len() as f64 / observations_either.len() as f64);
+    let a = observations_vec.len() as f64 / observations_either.len() as f64;
 
     println!("{}", a);  
 
