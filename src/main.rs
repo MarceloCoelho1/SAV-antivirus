@@ -2,15 +2,12 @@ use std::io::{Read, self};
 use std::fs::{File, self};
 use std::path::{Path};
 use sha2::{Digest, Sha256};
-use stringmetrics::levenshtein;
+use std::cmp;
 
 fn main() {
     println!("SAV, antivirus");
     let path = Path::new("/home/marcelo/Desktop/side-projects/sav/src/comparing/");
     visit_dirs(path);
-
-
-    
 }
 
 
@@ -36,7 +33,7 @@ fn visit_dirs(dir: &Path) -> io::Result<()> {
 // signature-based detection
 
 fn signature_detection(file_path: &Path) -> io::Result<()> {
-    let virus_hash_example = "3339730bc15121cf0cf2a29d74b3000bc3a5cd6caad26f305723043c4f70596b";
+    let virus_hash_example = "3339730bc15121cf0cf2a29d74b3000bc3as5cd6caad26f305723043c4f70596b";
 
     match File::open(file_path) {
         Ok(mut file) => {
@@ -100,13 +97,17 @@ fn heuristic_based_detection(file_path: &Path) -> bool {
  
     if let Ok(_) = file.read_to_end(&mut buffer) {
         let file_string = String::from_utf8(buffer).expect("Failed to convert bytes to string");
- 
-        let distance = levenshtein(&file_string, &virus_string);
+        let file_len = file_string.len();
+        let virus_len = virus_string.len();
+
+
+        let distance = levenshtein_distance(&file_string, &virus_string, file_len, virus_len);
         let max_length = file_string.len().max(virus_string.len());
     
         let similarity = (1.0 - (distance as f64 / max_length as f64)) * 100.00;
     
         println!("{similarity}");
+        println!("distance is: {distance}");
  
         if similarity > 80.0 {
             println!("is a virus");
@@ -121,5 +122,28 @@ fn heuristic_based_detection(file_path: &Path) -> bool {
     } 
  
     false
- }
+}
 
+
+fn levenshtein_distance(str1: &str, str2: &str, m: usize, n: usize) -> usize {
+
+    if m == 0 {
+        return n;
+    }
+
+    if n == 0 {
+        return m;
+    }
+
+    if str1.as_bytes()[m - 1] == str2.as_bytes()[n - 1] {
+        return levenshtein_distance(str1, str2, m - 1, n - 1);
+    }
+
+    return 1 + cmp::min(
+        levenshtein_distance(str1, str2, m, n -1), 
+        cmp::min(
+            levenshtein_distance(str1, str2, m - 1, n), 
+            levenshtein_distance(str1, str2, m-1, n-1)
+        )
+    );
+}
