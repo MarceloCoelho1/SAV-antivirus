@@ -147,3 +147,7 @@ fn levenshtein_distance(str1: &str, str2: &str, m: usize, n: usize) -> usize {
         )
     );
 }
+
+fn jaccard_similarity() {
+    
+}
