@@ -7,7 +7,9 @@ use std::cmp;
 fn main() {
     println!("SAV, antivirus");
     let path = Path::new("/home/marcelo/Desktop/side-projects/sav/src/comparing/");
-    visit_dirs(path);
+    let vec1: Vec<u8> = vec![0, 1, 2, 5, 6, 8, 9];
+    let vec2: Vec<u8> = vec![0, 2, 3, 4, 5, 7, 9];
+    jaccard_similarity(&vec1, &vec2);
 }
 
 
@@ -148,6 +150,19 @@ fn levenshtein_distance(str1: &str, str2: &str, m: usize, n: usize) -> usize {
     );
 }
 
-fn jaccard_similarity() {
-    
+fn jaccard_similarity(vec1: &Vec, vec1: &Vec1) {
+
+    let number_of_observations = 0;
+
+    // we first find the total number of observations in both sets, 
+    let observations_in_both: Vec<u8> = vec![0, 2, 5, 9]; 
+
+
+    // then divide by the total number of observations in either set;
+    let observations_in_either: Vec<u8> = vec![0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
+
+    let similarity = 4.0/10.0;
+    println!("{similarity}");
+
+
 }
