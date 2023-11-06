@@ -7,9 +7,11 @@ use std::cmp;
 fn main() {
     println!("SAV, antivirus");
     let path = Path::new("/home/marcelo/Desktop/side-projects/sav/src/comparing/");
-    let vec1: Vec<&str> = vec!["cat", "dog", "hippo", "monkey"];
-    let vec2: Vec<&str> = vec!["monkey", "rhino", "ostrich", "salmon"];
-    jaccard_similarity(&vec1, &vec2);
+    visit_dirs(&path);
+    // let vec1: Vec<&str> = vec!["cat", "dog", "hippo", "monkey"];
+    // let vec2: Vec<&str> = vec!["monkey", "rhino", "ostrich", "salmon"];
+
+    // jaccard_similarity(&vec1, &vec2);
 }
 
 
@@ -146,7 +148,7 @@ fn levenshtein_distance(str1: &str, str2: &str, m: usize, n: usize) -> usize {
         cmp::min(
             levenshtein_distance(str1, str2, m - 1, n), 
             levenshtein_distance(str1, str2, m-1, n-1)
-        )
+        ) 
     );
 }
 
