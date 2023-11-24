@@ -188,3 +188,8 @@ fn jaccard_similarity(vec1: &Vec<&str>, vec2: &Vec<&str>) {
 
 
 }
+
+
+fn neural_network_detection() {
+    
+}
